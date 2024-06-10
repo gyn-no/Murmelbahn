@@ -21,7 +21,7 @@ let off = { x: 0, y: 0 };
 const dim = { w: 3840, h: 2160 };
 
 // Speichere die Anfangsposition der Murmel
-const murmelStartPos = { x: 900, y: 100, };
+const murmelStartPos = { x: 900, y: 50, };
 
 class TrampolineBlock extends BlockCore {
   constructor(world, options, properties) {
@@ -57,7 +57,7 @@ class TrampolineBlock extends BlockCore {
 
 let murmelImage
 function preload() {
-  backgroundImage = loadImage('room1 test.png'); // Pfad zu Ihrem Hintergrundbild
+  backgroundImage = loadImage('redroom.png'); // Pfad zu Ihrem Hintergrundbild
 
   let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
   let imageSize = Math.min(murmelDiameter, 100); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
@@ -149,7 +149,7 @@ function createScene() {
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 900, y: 400, w: 100, h: 20, color: 'orange',
+      x: 900, y: 600, w: 200, h: 20, color: 'orange',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -163,7 +163,7 @@ function createScene() {
   // Set the starting position of the marble directly above the right trampoline
   murmel = new Ball(
     world,
-    { x: 900, y: 100, r: 30, color: 'magenta' }, // Startposition der Murmel geändert
+    { x: 900, y: 500, r: 30, color: 'magenta' }, // Startposition der Murmel geändert
     { label: "Murmel", restitution: 0.0, friction: 0.0, frictionAir: 0.0, density: 0.006 }
   );
   blocks.push(murmel);
@@ -200,7 +200,14 @@ function createScene() {
 }
 
 function createScene2() {
-  new BlocksFromSVG(world, 'static.svg', blocks, { isStatic: true });
+  // Laden der SVG-Datei und Erstellen der Blöcke
+  loadSVG('haus außsen.svg', (paths) => {
+    paths.forEach(path => {
+      let block = createBlockFromSVGPath(world, path);
+      blocks.push(block);
+    });
+  });
+  new BlocksFromSVG(world, 'haus außen.svg', blocks, { isStatic: true });
 
   // the box triggers a function on collisions
   blocks.push(new BlockCore(world,
