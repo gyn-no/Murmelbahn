@@ -21,7 +21,7 @@ let off = { x: 0, y: 0 };
 const dim = { w: 3840, h: 2160 };
 
 // Speichere die Anfangsposition der Murmel
-const murmelStartPos = { x: 900, y: 50, };
+const murmelStartPos = { x: 2950, y: 600, };
 
 class TrampolineBlock extends BlockCore {
   constructor(world, options, properties) {
@@ -57,7 +57,7 @@ class TrampolineBlock extends BlockCore {
 
 let murmelImage
 function preload() {
-  backgroundImage = loadImage('redroom.png'); // Pfad zu Ihrem Hintergrundbild
+  backgroundImage = loadImage('room1 test.png'); // Pfad zu Ihrem Hintergrundbild
 
   let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
   let imageSize = Math.min(murmelDiameter, 100); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
@@ -88,15 +88,7 @@ function setup() {
   mouse.on("startdrag", evt => {
     isDrag = true;
   });
-  mouse.on("mouseup", evt => {
-    if (!isDrag) {
-      let ball = new Ball(world,
-        { x: evt.mouse.position.x, y: evt.mouse.position.y, r: 15, color: 'yellow' },
-        { isStatic: false, restitution: 0.9, label: 'Murmel' });
-      blocks.push(ball);
-    }
-    isDrag = false;
-  });
+  
 
  // process collisions - check whether block "Murmel" hits another Block
 Events.on(engine, 'collisionStart', function (event) {
@@ -124,7 +116,7 @@ function createScene() {
   // create some blocks 
   resetBlock = new BlockCore(
     world,
-    { x: 1000, y: 900, w: 1400, h: 20, color: 'gray', angle: 0 }, // horizontal block
+    { x: 2700, y: 1200, w: 1000, h: 20, color: 'rgba(0, 0, 0, 0)', angle: 0 }, // horizontal block
     { isStatic: true }
   );
   blocks.push(resetBlock);
@@ -132,16 +124,16 @@ function createScene() {
   // Left vertical block
   blocks.push(new BlockCore(
     world,
-    { x: 0, y: height / 2, w: 50, h: height, color: 'lightgray', angle: PI / 2 }, // vertical block on the left
+    { x: 2000, y: 950, w: 50, h: 500, color: 'rgba(0, 0, 0, 0)', angle: PI / 2 }, // vertical block on the left
     { isStatic: true }
   ));
 
    // Right vertical block
    blocks.push(new BlockCore(
     world,
-    { x: width + 200, y: height / 2, w: 50, h: height, color: 'lightgray', angle: PI / 2 }, // vertical block on the right
+    { x: 3200, y: 950, w: 50, h: 500, color: 'rgba(0, 0, 0, 0)', angle: PI / 2 }, // vertical block on the right
     { isStatic: true }
-  
+
   ));
 
 
@@ -149,7 +141,7 @@ function createScene() {
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 900, y: 600, w: 200, h: 20, color: 'orange',
+      x: 3000, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -163,7 +155,7 @@ function createScene() {
   // Set the starting position of the marble directly above the right trampoline
   murmel = new Ball(
     world,
-    { x: 900, y: 500, r: 30, color: 'magenta' }, // Startposition der Murmel geändert
+    { x: 2950, y: 600, r: 30, color: 'rgba(0, 0, 0, 0)' }, // Startposition der Murmel geändert
     { label: "Murmel", restitution: 0.0, friction: 0.0, frictionAir: 0.0, density: 0.006 }
   );
   blocks.push(murmel);
@@ -172,7 +164,7 @@ function createScene() {
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 200, y: 400, w: 100, h: 20, color: 'orange',
+      x: 2320, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -187,7 +179,7 @@ function createScene() {
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 600, y: 400, w: 100, h: 20, color: 'orange',
+      x: 2660, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -200,14 +192,7 @@ function createScene() {
 }
 
 function createScene2() {
-  // Laden der SVG-Datei und Erstellen der Blöcke
-  loadSVG('haus außsen.svg', (paths) => {
-    paths.forEach(path => {
-      let block = createBlockFromSVGPath(world, path);
-      blocks.push(block);
-    });
-  });
-  new BlocksFromSVG(world, 'haus außen.svg', blocks, { isStatic: true });
+  new BlocksFromSVG(world, 'static.svg', blocks, { isStatic: true });
 
   // the box triggers a function on collisions
   blocks.push(new BlockCore(world,
@@ -220,7 +205,7 @@ function createScene2() {
 
   // the ball has a label and can react on collisions
   murmel = new Ball(world,
-    { x: 300, y: 100, r: 25, color: 'green' },
+    { x: 2950, y: 600, r: 25, color: 'green' },
     { label: "Murmel", density: 0.004, restitution: 0.5, friction: 0.0, frictionAir: 0.0 }
   );
   blocks.push(murmel);
@@ -254,11 +239,11 @@ function keyPressed(event) {
 }
 
 function draw() {
-  background(0, 60);
+  //background(0, 60);
   clear();
 
   // Zeichne den Hintergrund
-  image(backgroundImage, 0, 0, windowWidth, windowHeight);
+  //image(backgroundImage, 0, 0, windowWidth, windowHeight);
   // position canvas and translate coordinates
   scrollEndless(murmel.body.position);
 
@@ -273,6 +258,21 @@ function draw() {
 
   // draw the murmel with image texture
   drawMurmel();
+
+  function mouseDragged() {
+    if (mouseButton === LEFT) {
+      off.x -= mouseX - pmouseX;
+      off.y -= mouseY - pmouseY;
+      off.x = constrain(off.x, 0, dim.w - windowWidth);
+      off.y = constrain(off.y, 0, dim.h - windowHeight);
+      scrollEndless({ x: mouseX + off.x, y: mouseY + off.y });
+    }
+  }
+  
+  function mouseReleased() {
+    return false; // prevent default
+  }
+  
 }
 
 
@@ -300,7 +300,7 @@ function getBlockAtPosition(x, y) {
 function drawMurmel() {
   let pos = murmel.body.position;
   let angle = murmel.body.angle;
-  
+
   push();
   translate(pos.x, pos.y);
   rotate(angle);
@@ -309,4 +309,3 @@ function drawMurmel() {
   image(murmelImage, 0, 0, imageSize, imageSize); // Verwende die PNG-Textur mit der festgelegten Größe
   pop();
 }
-
