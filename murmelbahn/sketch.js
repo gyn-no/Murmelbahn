@@ -12,16 +12,20 @@ let isDrag = false;
 // an array to contain all the blocks created
 let blocks = [];
 let murmel;
+let done = false;
 let resetBlock;
+let propeller;
+let angle = 0;
 
 let canvasElem;
 let off = { x: 0, y: 0 };
 
  // das ist die Dimension des kompletten Levels 
-const dim = { w: 3840, h: 2160 };
+const dim = { w: 15687, h: 10649 };
 
-// Speichere die Anfangsposition der Murmel
-const murmelStartPos = { x: 2950, y: 600, };
+// Speichere die Anfangsposition der Murmel (dachbodenloch)
+const murmelStartPos = { x: 7100, y: 2600, };
+let spaceLeft = false;
 
 class TrampolineBlock extends BlockCore {
   constructor(world, options, properties) {
@@ -57,7 +61,6 @@ class TrampolineBlock extends BlockCore {
 
 let murmelImage
 function preload() {
-  backgroundImage = loadImage('room1 test.png'); // Pfad zu Ihrem Hintergrundbild
 
   let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
   let imageSize = Math.min(murmelDiameter, 100); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
@@ -85,19 +88,19 @@ function setup() {
   // Mouse.setScale(mouse, { x: mouseScale, y: mouseScale });
 
   // process mouseup events in order to drag objects or add more balls
-  mouse.on("startdrag", evt => {
-    isDrag = true;
-  });
+  // mouse.on("startdrag", evt => {
+  //   isDrag = true;
+  // });
   
 
  // process collisions - check whether block "Murmel" hits another Block
 Events.on(engine, 'collisionStart', function (event) {
   var pairs = event.pairs;
   pairs.forEach((pair, i) => {
-    if ((pair.bodyA.label == 'Murmel' && pair.bodyB === resetBlock.body) ||
-        (pair.bodyB.label == 'Murmel' && pair.bodyA === resetBlock.body)) {
-      resetMurmelPosition();
-    }
+    // if ((pair.bodyA.label == 'Murmel' && pair.bodyB === resetBlock.body) ||
+    //     (pair.bodyB.label == 'Murmel' && pair.bodyA === resetBlock.body)) {
+    //   resetMurmelPosition();
+    // }
     if (pair.bodyA.label == 'Murmel') {
       pair.bodyA.plugin.block.collideWith(pair.bodyB.plugin.block);
     }
@@ -113,40 +116,82 @@ Events.on(engine, 'collisionStart', function (event) {
 }
 
 function createScene() {
-  // create some blocks 
+  new BlocksFromSVG(world, '1.svg', blocks, { isStatic: true });
+
+  // //sensorblock dachboden
+  blocks.push(new BlockCore(
+    world,
+    {
+      x: 8200, y: 3500, w: 300, h: 20, color: 'blue',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock 1 wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+          // Setze done auf true, wenn die Murmel den Sensorblock trifft
+          done = true;
+          spaceLeft = true;
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
+  
+//sensor unten
+  blocks.push(new BlockCore(
+    world,
+    {
+      x: 6600, y: 7200, w: 1000, h: 20, color: 'blue',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock 1 wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+          // Setze done auf true, wenn die Murmel den Sensorblock trifft
+          done = true;
+          spaceLeft = false;
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
+  
+  
+
+  // resetblock
   resetBlock = new BlockCore(
     world,
-    { x: 2700, y: 1200, w: 1000, h: 20, color: 'rgba(0, 0, 0, 0)', angle: 0 }, // horizontal block
+    { x: 7600, y: 5000, w: 2000, h: 20, color: 'grey', angle: 0 }, // horizontal block
     { isStatic: true }
   );
   blocks.push(resetBlock);
 
-  // Left vertical block
-  blocks.push(new BlockCore(
-    world,
-    { x: 2000, y: 950, w: 50, h: 500, color: 'rgba(0, 0, 0, 0)', angle: PI / 2 }, // vertical block on the left
-    { isStatic: true }
-  ));
+  // // Left vertical block
+  // blocks.push(new BlockCore(
+  //   world,
+  //   { x: 2000, y: 950, w: 50, h: 500, color: 'lightgrey', angle: PI / 2 }, // vertical block on the left
+  //   { isStatic: true }
+  // ));
 
-   // Right vertical block
-   blocks.push(new BlockCore(
-    world,
-    { x: 3200, y: 950, w: 50, h: 500, color: 'rgba(0, 0, 0, 0)', angle: PI / 2 }, // vertical block on the right
-    { isStatic: true }
+  //  // Right vertical block
+  //  blocks.push(new BlockCore(
+  //   world,
+  //   { x: 3200, y: 950, w: 50, h: 500, color: 'lightgrey', angle: PI / 2 }, // vertical block on the right
+  //   { isStatic: true }
 
-  ));
+  // ));
 
 
-  // right trampoline block
+  // 4. trampoline block
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 3000, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
+      x: 8220, y: 4390, w: 300, h: 20, color: 'orange',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
       trigger: (ball, block) => {
-        Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.5 });
+        Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.2, y: -0.5 });
       }
     },
     { isStatic: true }
@@ -155,16 +200,16 @@ function createScene() {
   // Set the starting position of the marble directly above the right trampoline
   murmel = new Ball(
     world,
-    { x: 2950, y: 600, r: 30, color: 'rgba(0, 0, 0, 0)' }, // Startposition der Murmel geändert
+    { x: 7100, y: 1900, r: 30, color: 'green', ximage: murmelImage }, // Startposition der Murmel geändert
     { label: "Murmel", restitution: 0.0, friction: 0.0, frictionAir: 0.0, density: 0.006 }
   );
   blocks.push(murmel);
 
-  // Left trampoline block
+  // 1. trampoline block
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 2320, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
+      x: 6720, y: 4390, w: 150, h: 20, color: 'orange',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -175,41 +220,90 @@ function createScene() {
     { isStatic: true }
   ));
 
-  // Center trampoline block
+//3. trampoline block
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 2660, y: 1070, w: 200, h: 20, color: 'rgba(0, 0, 0, 0)',
+      x: 7670, y: 4390, w: 200, h: 20, color: 'orange',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
       trigger: (ball, block) => {
-        Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.5 });
+        Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.05, y: -0.5 });
       }
     },
     { isStatic: true }
   ));
-}
 
-function createScene2() {
-  new BlocksFromSVG(world, 'static.svg', blocks, { isStatic: true });
-
-  // the box triggers a function on collisions
-  blocks.push(new BlockCore(world,
+  // 2. trampoline block
+  blocks.push(new TrampolineBlock(
+    world,
     {
-      x: 200, y: 200, w: 60, h: 60, color: 'blue',
-      trigger: (ball, block) => { ball.attributes.color = color(Math.random() * 256, Math.random() * 256, Math.random() * 256); }
+      x: 7200, y: 4390, w: 200, h: 20, color: 'orange',
+      restitution: 0.0,
+      friction: 0.8,
+      density: 0.5,
+      trigger: (ball, block) => {
+        Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.1, y: -0.5 });
+      }
     },
-    { isStatic: false, density: 0.05, restitution: 0.5, frictionAir: 0.01 }
+    { isStatic: true }
   ));
 
-  // the ball has a label and can react on collisions
-  murmel = new Ball(world,
-    { x: 2950, y: 600, r: 25, color: 'green' },
-    { label: "Murmel", density: 0.004, restitution: 0.5, friction: 0.0, frictionAir: 0.0 }
+//dachgeschoss trampo
+  blocks.push(new TrampolineBlock(
+    world,
+    {
+      x: 7050, y: 3300, w: 200, h: 20, color: 'orange',
+      restitution: 0.0,
+      friction: 0.8,
+      density: 0.5,
+      trigger: (ball, block) => {
+        Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.8 });
+      }
+    },
+    { isStatic: true }
+  ));
+
+   // add stacks
+   boxes = new Stack(world, {
+    x: 8000, y: 8000, cols: 2, rows: 3, colGap: 3, rowGap: 3, color: 'black',
+    create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 100)
+  });
+
+  boxess = new Stack(world, {
+    x: 9500, y: 8000, cols: 2, rows: 3, colGap: 3, rowGap: 3, color: 'blue',
+    create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 100)
+  });
+
+   // propeller
+   propeller = new Block(world,
+    { x: 11300, y: 7700, w: 900, h: 30, color: 'grey' },
+    { isStatic: true, angle: angle }
   );
-  blocks.push(murmel);
+
+  
 }
+
+// function createScene2() {
+//   new BlocksFromSVG(world, 'static.svg', blocks, { isStatic: true });
+
+//   // the box triggers a function on collisions
+//   blocks.push(new BlockCore(world,
+//     {
+//       x: 200, y: 200, w: 60, h: 60, color: 'blue',
+//       trigger: (ball, block) => { ball.attributes.color = color(Math.random() * 256, Math.random() * 256, Math.random() * 256); }
+//     },
+//     { isStatic: false, density: 0.05, restitution: 0.5, frictionAir: 0.01 }
+//   ));
+
+//   // the ball has a label and can react on collisions
+//   murmel = new Ball(world,
+//     { x: 2950, y: 600, r: 25, color: 'green' },
+//     { label: "Murmel", density: 0.004, restitution: 0.5, friction: 0.0, frictionAir: 0.0 }
+//   );
+//   blocks.push(murmel);
+// }
 
 function scrollEndless(point) {
   // wohin muss verschoben werden damit point wenn möglich in der Mitte bleibt
@@ -227,24 +321,28 @@ function scrollEndless(point) {
 
 function keyPressed(event) {
   switch (keyCode) {
-    case 32:
+    case 32: // ASCII code für Leertaste
       console.log("Space");
       event.preventDefault();
-      Matter.Body.applyForce(murmel.body, murmel.body.position, { x: -0.2, y: -0.2   });
-      // Matter. Body.scale(murmel.body, 1.5, 1.5);
+      // Überprüfe, ob die Murmel nicht im Sensorblock ist, bevor du die Kraft anwendest
+      if (!spaceLeft) {
+        Matter.Body.applyForce(murmel.body, murmel.body.position, { x: 0.2, y: -0.2 });
+      } else {
+        Matter.Body.applyForce(murmel.body, murmel.body.position, { x: -0.2, y: -0.2 });
+      }
       break;
     default:
       console.log(keyCode);
   }
 }
 
+
+
 function draw() {
   //background(0, 60);
   clear();
-
-  // Zeichne den Hintergrund
-  //image(backgroundImage, 0, 0, windowWidth, windowHeight);
   // position canvas and translate coordinates
+  //translate(-off.x, -off.y);
   scrollEndless(murmel.body.position);
 
   // Check if the murmel has fallen below a certain point
@@ -257,21 +355,17 @@ function draw() {
   mouse.draw();
 
   // draw the murmel with image texture
-  drawMurmel();
+  murmel.draw();
 
-  function mouseDragged() {
-    if (mouseButton === LEFT) {
-      off.x -= mouseX - pmouseX;
-      off.y -= mouseY - pmouseY;
-      off.x = constrain(off.x, 0, dim.w - windowWidth);
-      off.y = constrain(off.y, 0, dim.h - windowHeight);
-      scrollEndless({ x: mouseX + off.x, y: mouseY + off.y });
-    }
-  }
-  
-  function mouseReleased() {
-    return false; // prevent default
-  }
+  // animate angle property of propeller
+  Matter.Body.setAngle(propeller.body, angle);
+  Matter.Body.setAngularVelocity(propeller.body, 0.15);
+  angle += 0.07;
+
+  propeller.draw();
+
+  boxes.draw();
+  boxess.draw();
   
 }
 
@@ -297,15 +391,4 @@ function getBlockAtPosition(x, y) {
   return null;
 }
 
-function drawMurmel() {
-  let pos = murmel.body.position;
-  let angle = murmel.body.angle;
 
-  push();
-  translate(pos.x, pos.y);
-  rotate(angle);
-  imageMode(CENTER);
-  let imageSize = 30 * 3; // Durchmesser der Murmel wird verdoppelt
-  image(murmelImage, 0, 0, imageSize, imageSize); // Verwende die PNG-Textur mit der festgelegten Größe
-  pop();
-}
