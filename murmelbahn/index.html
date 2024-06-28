@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <script language="javascript" type="text/javascript" src="../libraries/p5.min.js"></script>
+  <script language="javascript" type="text/javascript" src="../libraries/p5.sound.min.js"></script>
   <script language="javascript" type="text/javascript" src="../libraries/matter.js"></script>
   <script language="javascript" type="text/javascript" src="../libraries/decomp.min.js"></script>
   <script language="javascript" type="text/javascript" src="../libraries/pathseg.js"></script>
@@ -35,7 +36,7 @@
       width: 15687px;
       height: 10649px;
 
-      background: url('./background.png') no-repeat;
+      background: url('./Original.png') no-repeat;
       z-index: -1;
     }
 
@@ -43,7 +44,7 @@
       position: absolute;
       width: 15687px;
       height: 10649px;
-      background: url('./overlay1.png') no-repeat;
+      background: url('./overlayy.png') no-repeat;
       z-index: 1;
       pointer-events: none;
     }
@@ -56,6 +57,38 @@
   <!-- p5 canvas is generated on run time -->
   <div id="thecanvas"></div>
   <div id="sprite-foreground"></div>
+
+  <audio id="backgroundmusik" preload="auto" autoplay loop>
+    <source src="Backroundmusik.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <audio id="topf" preload="auto">
+    <source src="Topf.mp3" type="audio/mpeg">
+    <source src="Topf.wav" type="audio/wav">
+  </audio>
+
+  <audio id="sarg" preload="auto">
+    <source src="Sarg.mp3" type="audio/mpeg">
+    <source src="Sarg.wav" type="audio/wav">
+  </audio>
+
+  <audio id="geist" preload="auto">
+    <source src="geist.mp3" type="audio/mpeg">
+    <source src="geist.wav" type="audio/wav">
+  </audio>
+
+  <audio id="buch" preload="auto">
+    <source src="buch.mp3" type="audio/mpeg">
+    <source src="buch.wav" type="audio/wav">
+  </audio>
+
+  
+  
+  
+
+  
+  
 </body>
 
 </html>

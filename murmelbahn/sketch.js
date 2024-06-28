@@ -20,6 +20,7 @@ let angle = 0;
 let elevator;
 let elevatorY = 7400;
 let levelx
+let topfSound;
 
 
 let canvasElem;
@@ -31,6 +32,8 @@ const dim = { w: 15687, h: 10649 };
 // Speichere die Anfangsposition der Murmel (dachbodenloch)
 const murmelStartPos = { x: 7200, y: 2600, };
 let spaceLeft = false;
+
+
 
 
 
@@ -71,9 +74,12 @@ function preload() {
 
   let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
   let imageSize = Math.min(murmelDiameter, 100); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
-  murmelImage = loadImage('murmel texture test.png');
+  murmelImage = loadImage('murmel.png');
   murmelImage.resize(imageSize, imageSize); // Skaliere die Textur auf die gewünschte Größe
+  
 }
+
+
 
 
 
@@ -161,6 +167,14 @@ function createScene() {
     },
     { isStatic: true, isSensor: true }
   ));
+
+//elevatorstop
+  blocks.push(new BlockCore(
+    world,
+    { x: 7000, y: 7000, w: 300, h: 20, color: 'lightgrey' }, 
+    { isStatic: true, angle: -PI/5  }
+  
+  ));
   
 //sensor saal 
   blocks.push(new BlockCore(
@@ -175,6 +189,9 @@ function createScene() {
           
           Matter.Body.applyForce(murmel.body, murmel.body.position, { x: 0.5, y: 0 });
 
+          console.log('geist')
+        document.getElementById('geist').play();
+
           spaceLeft = false;
 
           
@@ -183,6 +200,8 @@ function createScene() {
     },
     { isStatic: true, isSensor: true }
   ));
+
+ 
 
   //sensor garten
   blocks.push(new BlockCore(
@@ -199,7 +218,7 @@ function createScene() {
            // create boxesx: 7200, y: 3150
      for (let i = 0; i < 30; i++) {
       let newBox = new Ball(world,
-        { x: random(9200, 11400), y: 7700, r: 40, color: 'white' },
+        { x: random(9200, 11400), y: 7700, r: 30, color: 'white' },
         { isStatic: false }
       );
       blocks.push(newBox);
@@ -324,7 +343,7 @@ function createScene() {
   // ));
 
 
-  // 4. trampoline block
+  // balkon
   blocks.push(new TrampolineBlock(
     world,
     {
@@ -334,6 +353,8 @@ function createScene() {
       density: 0.1,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.2, y: -0.5 });
+
+    
       }
     },
     { isStatic: true }
@@ -342,7 +363,7 @@ function createScene() {
   // Set the starting position of the marble directly above the right trampoline
   murmel = new Ball(
     world,
-    { x: 7200, y: 1900, r: 30, color: 'green', ximage: murmelImage }, // Startposition der Murmel geändert
+    { x: 7200, y: 1900, r: 30, xcolor: 'green', image: murmelImage }, // Startposition der Murmel geändert
     { label: "Murmel", restitution: 0.0, friction: 0.01, frictionAir: 0.0, density: 0.006 }
   );
   blocks.push(murmel);
@@ -357,6 +378,9 @@ function createScene() {
       density: 0.1,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.5 });
+
+        console.log('sarg')
+        document.getElementById('sarg').play();
       }
     },
     { isStatic: true }
@@ -372,6 +396,9 @@ function createScene() {
       density: 0.1,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.04, y: -0.5 });
+
+        console.log('sarg')
+        document.getElementById('sarg').play();
       }
     },
     { isStatic: true }
@@ -387,6 +414,9 @@ function createScene() {
       density: 0.5,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.1, y: -0.5 });
+
+        console.log('sarg')
+        document.getElementById('sarg').play();
       }
     },
     { isStatic: true }
@@ -402,6 +432,9 @@ function createScene() {
       density: 0.5,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.8 });
+
+      console.log('topf')
+        document.getElementById('topf').play();
     
     }
     },
@@ -417,11 +450,12 @@ function createScene() {
   boxess = new Stack(world, {
     x: 8500, y: 8000, cols: 1, rows: 5, colGap: 0, rowGap: 0, color: 'blue',
     create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50)
+    
   });
 
    // propeller
    propeller = new Block(world,
-    { x: 11400, y: 7700, w: 950, h: 30, color: 'grey' },
+    { x: 11400, y: 7670, w: 950, h: 30, color: 'grey' },
     { isStatic: true, angle: angle }
   );
 
