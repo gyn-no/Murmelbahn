@@ -73,7 +73,7 @@ let murmelImage
 function preload() {
 
   let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
-  let imageSize = Math.min(murmelDiameter, 100); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
+  let imageSize = Math.min(murmelDiameter, 120); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
   murmelImage = loadImage('murmel.png');
   murmelImage.resize(imageSize, imageSize); // Skaliere die Textur auf die gewünschte Größe
   
@@ -123,10 +123,14 @@ Events.on(engine, 'collisionStart', function (event) {
   });
 });
 
+
+
   createScene();
   // run the engine
   Runner.run(engine);
 }
+
+
 
 function createScene() {
   new BlocksFromSVG(world, 'Framme 1.svg', blocks, { isStatic: true });
@@ -171,10 +175,34 @@ function createScene() {
 //elevatorstop
   blocks.push(new BlockCore(
     world,
-    { x: 7000, y: 7000, w: 300, h: 20, color: 'lightgrey' }, 
+    { x: 7000, y: 7100, w: 300, h: 20, color: 'lightgrey' }, 
     { isStatic: true, angle: -PI/5  }
   
   ));
+
+  //sensor treppe 
+  blocks.push(new BlockCore(
+    world,
+    {
+      x: 3700, y: 5000, w: 20, h: 1000, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock saal wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+
+          console.log('treppen')
+        document.getElementById('treppen').play();
+
+        
+
+          
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
+
   
 //sensor saal 
   blocks.push(new BlockCore(
@@ -213,6 +241,10 @@ function createScene() {
         if (!block.attributes.triggered) {
           console.log("Sensorblock garten wurde getroffen", block);
           block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+
+
+          console.log('augen')
+        document.getElementById('augen').play();
           
         
            // create boxesx: 7200, y: 3150
@@ -228,86 +260,212 @@ function createScene() {
     },
     { isStatic: true, isSensor: true }
   ));
-  
-// //gravity zu ende
-//   blocks.push(new BlockCore(
-//     world,
-//     {
-//       x: 5900, y: 6200, w: 20, h: 1000, color: 'red',
-//       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
-//       trigger: (ball, block) => {
-//         if (!block.attributes.triggered) {
-//           console.log("Sensorblock ende gravity wurde getroffen", block);
-//           block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
-         
-//           levelx = false;
-//           spaceLeft = false;
 
-//           Matter.Body.set(ball.body, {
-//             friction: 0, // keine Reibung mehr
+  //sensor gartenaugen 1
+  blocks.push(new BlockCore(
+    world,
+    {
+      x: 9300, y: 8100, w: 50, h: 20, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock augen wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+
+          console.log('augen')
+        document.getElementById('augen').play();
+
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
+
+   //sensor gartenaugen 2
+   blocks.push(new BlockCore(
+    world,
+    {
+      x: 9500, y: 8100, w: 50, h: 20, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock augen wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
           
-//           });
-//         }
-//       },
-//     },
-//     { isStatic: true, isSensor: true }
-//   ));
+          console.log('augen')
+        document.getElementById('augen').play();
 
-// //saal block 1 oben
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 4200, y: 6200, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: -PI/20  }
-  
-//   ));
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
 
-//   //saal block 1 unten
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 4400, y: 6500, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: PI/20  }
-  
-//   ));
 
-//   //saal block 2 oben
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 4600, y: 6200, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: -PI/20  }
-  
-//   ));
+   //sensor gartenaugen 3
+   blocks.push(new BlockCore(
+    world,
+    {
+      x: 9700, y: 8100, w: 50, h: 20, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock augen wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+          
+          console.log('augen')
+        document.getElementById('augen').play();
 
-//   //saal block 2 unten
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 4800, y: 6500, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: PI/20  }
-  
-//   ));
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
 
-//   //saal block 3 oben
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 5000, y: 6200, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: -PI/20  }
-  
-//   ));
+   //sensor gartenaugen 4
+   blocks.push(new BlockCore(
+    world,
+    {
+      x: 9900, y: 8100, w: 50, h: 20, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock augen wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+          
+          console.log('augen')
+        document.getElementById('augen').play();
 
-//   //saal block 3 unten
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 5200, y: 6500, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: PI/20  }
-  
-//   ));
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
 
-//   //saal block 4 oben
-//   blocks.push(new BlockCore(
-//     world,
-//     { x: 5400, y: 6200, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
-//     { isStatic: true, angle: -PI/20  }
+   //sensor gartenaugen 5
+   blocks.push(new BlockCore(
+    world,
+    {
+      x: 10100, y: 8100, w: 50, h: 20, color: 'red',
+      triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+      trigger: (ball, block) => {
+        if (!block.attributes.triggered) {
+          console.log("Sensorblock augen wurde getroffen", block);
+          block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+          
+          console.log('augen')
+        document.getElementById('augen').play();
+
+        }
+      },
+    },
+    { isStatic: true, isSensor: true }
+  ));
+
+ //sensor gartenaugen 6
+ blocks.push(new BlockCore(
+  world,
+  {
+    x: 10300, y: 8100, w: 50, h: 20, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('augen')
+      document.getElementById('augen').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+
+//sensor gartenaugen 7
+blocks.push(new BlockCore(
+  world,
+  {
+    x: 10500, y: 8100, w: 50, h: 20, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('augen')
+      document.getElementById('augen').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+
+//sensor gartenaugen 8
+blocks.push(new BlockCore(
+  world,
+  {
+    x: 10700, y: 8100, w: 50, h: 20, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('augen')
+      document.getElementById('augen').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
   
-//   ));
+
+//sensor gartenaugen 9
+blocks.push(new BlockCore(
+  world,
+  {
+    x: 10900, y: 8100, w: 50, h: 20, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('augen')
+      document.getElementById('augen').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+  
+//sensor gartenaugen 10
+blocks.push(new BlockCore(
+  world,
+  {
+    x: 11100, y: 8100, w: 50, h: 20, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('augen')
+      document.getElementById('augen').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+  
+
+  
+
 
 //   //saal block 4 unten
 //   blocks.push(new BlockCore(
@@ -353,6 +511,9 @@ function createScene() {
       density: 0.1,
       trigger: (ball, block) => {
         Matter.Body.applyForce(ball.body, ball.body.position, { x: -0.2, y: -0.5 });
+
+        console.log('glas')
+        document.getElementById('glas').play();
 
     
       }
@@ -453,6 +614,47 @@ function createScene() {
     
   });
 
+  //sensor stack 1
+ blocks.push(new BlockCore(
+  world,
+  {
+    x: 7500, y: 8100, w: 20, h: 200, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('buch')
+      document.getElementById('buch').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+
+//sensor stack 2
+blocks.push(new BlockCore(
+  world,
+  {
+    x: 8500, y: 8100, w: 20, h: 200, color: 'red',
+    triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+    trigger: (ball, block) => {
+      if (!block.attributes.triggered) {
+        console.log("Sensorblock augen wurde getroffen", block);
+        block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+        
+        console.log('buch')
+      document.getElementById('buch').play();
+
+      }
+    },
+  },
+  { isStatic: true, isSensor: true }
+));
+
+
    // propeller
    propeller = new Block(world,
     { x: 11400, y: 7670, w: 950, h: 30, color: 'grey' },
@@ -470,25 +672,6 @@ function createScene() {
   
 }
 
-// function createScene2() {
-//   new BlocksFromSVG(world, 'static.svg', blocks, { isStatic: true });
-
-//   // the box triggers a function on collisions
-//   blocks.push(new BlockCore(world,
-//     {
-//       x: 200, y: 200, w: 60, h: 60, color: 'blue',
-//       trigger: (ball, block) => { ball.attributes.color = color(Math.random() * 256, Math.random() * 256, Math.random() * 256); }
-//     },
-//     { isStatic: false, density: 0.05, restitution: 0.5, frictionAir: 0.01 }
-//   ));
-
-//   // the ball has a label and can react on collisions
-//   murmel = new Ball(world,
-//     { x: 2950, y: 600, r: 25, color: 'green' },
-//     { label: "Murmel", density: 0.004, restitution: 0.5, friction: 0.0, frictionAir: 0.0 }
-//   );
-//   blocks.push(murmel);
-// }
 
 function scrollEndless(point) {
   // wohin muss verschoben werden damit point wenn möglich in der Mitte bleibt
@@ -515,10 +698,7 @@ function keyPressed(event) {
       } else {
         Matter.Body.applyForce(murmel.body, murmel.body.position, { x: -0.2, y: -0.4 });
       }
-      // if (levelx) {
-      //   // reverse gravity
-      //   engine.world.gravity.y *= -1;
-      // }
+     
       break;
     default:
       console.log(keyCode);
