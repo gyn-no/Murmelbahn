@@ -19,8 +19,30 @@ let propeller;
 let angle = 0;
 let elevator;
 let elevatorY = 7400;
-let levelx
-let topfSound;
+let buch1
+let book1;
+let buch2
+let book2
+let buch3
+let book3
+let buch4
+let book4
+let buch5
+let buch6
+let buch7
+let buch8
+let buch9
+let book5
+let book6
+let book7
+let book8
+let book9
+
+
+let augenrot;
+let augenblau
+let augengrün
+
 
 
 let canvasElem;
@@ -69,14 +91,33 @@ class TrampolineBlock extends BlockCore {
   }
 }
 
+
 let murmelImage
+
+
 function preload() {
 
-  let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
-  let imageSize = Math.min(murmelDiameter, 120); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
+  //let murmelDiameter = 30 * 2; // Der Durchmesser der Murmel wird verdoppelt, da er als Radius verwendet wird
+  //let imageSize = Math.min(murmelDiameter, 120); // Begrenze die Bildgröße auf maximal 100 (kann angepasst werden)
   murmelImage = loadImage('murmel.png');
-  murmelImage.resize(imageSize, imageSize); // Skaliere die Textur auf die gewünschte Größe
-  
+  //murmelImage.resize(imageSize, imageSize); // Skaliere die Textur auf die gewünschte Größe
+
+
+  book1 = loadImage('Book1.png');
+  book2 = loadImage('Book2.png')
+  book3 = loadImage('book3.png')
+  book4 = loadImage('book4.png')
+  book5 = loadImage('book5.png')
+  book6 = loadImage('book6.png')
+  book7 = loadImage('book7.png')
+  book8 = loadImage('book8.png')
+  book9 = loadImage('book9.png')
+
+
+  augenrot = loadImage('red eyes.png')
+  augenblau = loadImage('blue eyes.png')
+  augengrün = loadImage('green eye.png')
+ 
 }
 
 
@@ -131,7 +172,6 @@ Events.on(engine, 'collisionStart', function (event) {
 }
 
 
-
 function createScene() {
   new BlocksFromSVG(world, 'Framme 1.svg', blocks, { isStatic: true });
 
@@ -180,11 +220,38 @@ function createScene() {
   
   ));
 
+
+    //sensor nach sarg
+    blocks.push(new BlockCore(
+      world,
+      {
+        x: 6000, y: 5000, w: 20, h: 1000, color: 'red',
+        triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+        trigger: (ball, block) => {
+          if (!block.attributes.triggered) {
+            console.log("Sensorblock nach Treppe wurde getroffen", block);
+            block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+
+            Matter.Body.applyForce(murmel.body, murmel.body.position, { x: 0.3, y: 0 });
+  
+            console.log('treppenkurz')
+          document.getElementById('treppenkurz').play();
+  
+          
+  
+            
+          }
+        },
+      },
+      { isStatic: true, isSensor: true }
+    ));
+  
+
   //sensor treppe 
   blocks.push(new BlockCore(
     world,
     {
-      x: 3700, y: 5000, w: 20, h: 1000, color: 'red',
+      x: 3600, y: 5000, w: 20, h: 1000, color: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -248,13 +315,30 @@ function createScene() {
           
         
            // create boxesx: 7200, y: 3150
-     for (let i = 0; i < 30; i++) {
-      let newBox = new Ball(world,
-        { x: random(9200, 11400), y: 7700, r: 30, color: 'white' },
-        { isStatic: false }
-      );
-      blocks.push(newBox);
-    }
+       for (let i = 0; i < 12; i++) {
+    let newBox1 = new Ball(world,
+      { x: random(9200, 11400), y: 7700, r: 30, xcolor: 'white', image: augenrot },
+      { isStatic: false }
+    );
+    blocks.push(newBox1);
+  }
+
+  for (let i = 0; i < 12; i++) {
+    let newBox2 = new Ball(world,
+      { x: random(9200, 11400), y: 7800, r: 30, xcolor: 'white', image: augenblau },
+      { isStatic: false }
+    );
+    blocks.push(newBox2);
+  }
+
+  for (let i = 0; i < 12; i++) {
+    let newBox3 = new Ball(world,
+      { x: random(9200, 11400), y: 7800, r: 30, xcolor: 'white', image: augengrün },
+      { isStatic: false }
+    );
+    blocks.push(newBox3);
+  }
+
         }
       },
     },
@@ -505,7 +589,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 8220, y: 4390, w: 300, h: 20, color: 'orange',
+      x: 8220, y: 4390, w: 500, h: 20, color: 'orange', Image: book1,
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -524,7 +608,7 @@ blocks.push(new BlockCore(
   // Set the starting position of the marble directly above the right trampoline
   murmel = new Ball(
     world,
-    { x: 7200, y: 1900, r: 30, xcolor: 'green', image: murmelImage }, // Startposition der Murmel geändert
+    { x: 7200, y: 1900, r: 30, xcolor: 'green', image: murmelImage }, 
     { label: "Murmel", restitution: 0.0, friction: 0.01, frictionAir: 0.0, density: 0.006 }
   );
   blocks.push(murmel);
@@ -538,7 +622,7 @@ blocks.push(new BlockCore(
       friction: 0.8,
       density: 0.1,
       trigger: (ball, block) => {
-        Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.5 });
+        Matter.Body.applyForce(ball.body, ball.body.position, { x: 0, y: -0.1 });
 
         console.log('sarg')
         document.getElementById('sarg').play();
@@ -583,6 +667,27 @@ blocks.push(new BlockCore(
     { isStatic: true }
   ));
 
+
+    // nach sarg balkon
+    blocks.push(new BlockCore(
+      world,
+      {
+        x: 6200, y: 4900, w: 600, h: 20, color: 'red',
+        triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
+        trigger: (ball, block) => {
+          if (!block.attributes.triggered) {
+            console.log("Sensorblock augen wurde getroffen", block);
+            block.attributes.triggered = true; // Markiere den Sensorblock als ausgelöst
+            
+            console.log('glas')
+          document.getElementById('glas').play();
+    
+          }
+        },
+      },
+      { isStatic: true, isSensor: true }
+    ));
+
 //dachgeschoss trampo
   blocks.push(new TrampolineBlock(
     world,
@@ -602,17 +707,86 @@ blocks.push(new BlockCore(
     { isStatic: true }
     ));
 
-   // add stacks
-   boxes = new Stack(world, {
-    x: 7500, y: 8000, cols: 1, rows: 4, colGap: 0, rowGap: 0, color: 'black',
-    create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50,)
-    });
+   //add stacks
+  //  boxes = new Stack(world, {
+  //   x: 7500, y: 8000, cols: 1, rows: 4, colGap: 0, rowGap: 0, color: 'black',
+  //   create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50,)
+  //   });
 
-  boxess = new Stack(world, {
-    x: 8500, y: 8000, cols: 1, rows: 5, colGap: 0, rowGap: 0, color: 'blue',
-    create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50)
+  // boxess = new Stack(world, {
+  //   x: 8500, y: 8000, cols: 1, rows: 5, colGap: 0, rowGap: 0, color: 'blue',
+  //   create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50)
     
-  });
+  // });
+
+//buch1
+  buch1 = new Block(world,
+    { x: 7500, y: 8150, w: 100, h: 50, xcolor: 'red', image: book1 },
+    
+    { isStatic: false }
+  );
+// buch2
+  buch2 = new Block(world,
+    { x: 7500, y: 8050, w: 100, h: 50, xcolor: 'red', image: book2 },
+    
+    { isStatic: false }
+  );
+
+  //buch3
+  buch3 = new Block(world,
+    { x: 7500, y: 7950, w: 100, h: 50, xcolor: 'red', image: book3 },
+    
+    { isStatic: false }
+  );
+
+  //buch4
+  buch4 = new Block(world,
+    { x: 7500, y: 7850, w: 100, h: 50, xcolor: 'red', image: book4 },
+    
+    { isStatic: false }
+  );
+
+  //buch5
+  buch5 = new Block(world,
+    { x: 8500, y: 8150, w: 100, h: 50, xcolor: 'red', image: book5 },
+    
+    { isStatic: false }
+  );
+
+
+
+  //buch6
+   
+  buch6 = new Block(world,
+    { x: 8500, y: 8050, w: 100, h: 50, xcolor: 'red', image: book6 },
+    
+    { isStatic: false }
+  );
+
+    //buch7
+    buch7 = new Block(world,
+      { x: 8500, y: 7950, w: 100, h: 50, xcolor: 'red', image: book7 },
+      
+      { isStatic: false }
+  );
+  
+   //buch8
+   buch8 = new Block(world,
+    { x: 8500, y: 7850, w: 100, h: 50, xcolor: 'red', image: book8 },
+    
+    { isStatic: false }
+);
+
+  //buch9
+  buch9 = new Block(world,
+    { x: 8500, y: 7750, w: 100, h: 50, xcolor: 'red', image: book9 },
+    
+    { isStatic: false }
+);
+
+  
+
+
 
   //sensor stack 1
  blocks.push(new BlockCore(
@@ -663,8 +837,8 @@ blocks.push(new BlockCore(
 
   // elevator
   elevator = new Block(world,
-    { x: 6670, y: elevatorY, w: 700, h: 50, color: 'red' },
-    // { x: 7200, y: 3050, w: 400, h: 50, color: 'red' },
+    { x: 6670, y: elevatorY, w: 700, h: 50, color: 'red', ximage: book1 },
+    
     { isStatic: true }
   );
 
@@ -728,9 +902,9 @@ function draw() {
   angle += 0.07;
   propeller.draw();
 
-  // Draw other elements (boxes)
-  boxes.draw();
-  boxess.draw();
+  //Draw other elements (boxes)
+  // boxes.draw();
+  // boxess.draw();
 
   // Move the elevator up and down
   let swingY = elevatorY + sin(frameCount * 0.01) * 700;
@@ -741,6 +915,16 @@ function draw() {
 
   // Draw the elevator last to ensure it is on top
   elevator.draw();
+
+  buch1.draw()
+  buch2.draw()
+  buch3.draw()
+  buch4.draw()
+  buch5.draw()
+  buch6.draw()
+  buch7.draw()
+  buch8.draw()
+  buch9.draw()
 
   
 }
