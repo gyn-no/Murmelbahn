@@ -43,6 +43,12 @@ let augenrot;
 let augenblau
 let augengrün
 
+let holzkecke
+let holzpropeller
+let holzelevator
+
+let elevatorstop
+
 
 
 let canvasElem;
@@ -72,7 +78,7 @@ class TrampolineBlock extends BlockCore {
     super.draw(); // Call the parent class's draw method to render the block's shape
 
     // Custom drawing code for the trampoline block
-    fill(255, 165, 0); // Set the fill color to orange
+    fill(255, 165, 0); // Set the fill xcolor to orange
     noStroke(); // Disable stroke
 
     // Draw a trampoline-like shape on top of the block
@@ -84,7 +90,7 @@ class TrampolineBlock extends BlockCore {
     endShape(CLOSE);
 
     // Add some texture to the trampoline block
-    fill(255); // Set the fill color to white
+    fill(255); // Set the fill xcolor to white
     textSize(24);
     textAlign(CENTER, CENTER);
     text("TRAMPOLINE", this.x + this.w / 2, this.y + this.h / 2);
@@ -117,6 +123,12 @@ function preload() {
   augenrot = loadImage('red eyes.png')
   augenblau = loadImage('blue eyes.png')
   augengrün = loadImage('green eye.png')
+
+  holzkecke = loadImage('Eckeholz.png')
+  holzelevator = loadImage('Holzbalken.png')
+  holzpropeller = loadImage('Holzbalken1.png')
+
+
  
 }
 
@@ -179,7 +191,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 8200, y: 3500, w: 300, h: 20, color: 'blue',
+      x: 8200, y: 3500, w: 300, h: 20, xcolor: 'blue',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -197,7 +209,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 6600, y: 7200, w: 1000, h: 20, color: 'blue',
+      x: 6600, y: 7200, w: 1000, h: 20, xcolor: 'blue',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -212,20 +224,19 @@ function createScene() {
     { isStatic: true, isSensor: true }
   ));
 
-//elevatorstop
-  blocks.push(new BlockCore(
-    world,
-    { x: 7000, y: 7100, w: 300, h: 20, color: 'lightgrey' }, 
+  //elevatorstop
+  elevatorstop = new Block(world,
+    { x: 6900, y: 7200, w: 300, h: 20, xcolor: 'lightgrey', image: holzkecke },
+    
     { isStatic: true, angle: -PI/5  }
-  
-  ));
+  );
 
 
     //sensor nach sarg
     blocks.push(new BlockCore(
       world,
       {
-        x: 6000, y: 5000, w: 20, h: 1000, color: 'red',
+        x: 6000, y: 5000, w: 20, h: 1000, xcolor: 'red',
         triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
         trigger: (ball, block) => {
           if (!block.attributes.triggered) {
@@ -251,7 +262,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 3600, y: 5000, w: 20, h: 1000, color: 'red',
+      x: 3600, y: 5000, w: 20, h: 1000, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -275,7 +286,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 3700, y: 6200, w: 20, h: 1000, color: 'red',
+      x: 3700, y: 6200, w: 20, h: 1000, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -286,6 +297,10 @@ function createScene() {
 
           console.log('geist')
         document.getElementById('geist').play();
+
+        console.log('speed')
+        document.getElementById('speed').play();
+
 
           spaceLeft = false;
 
@@ -302,7 +317,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 9100, y: 7700, w: 50, h: 1000, color: 'red',
+      x: 9100, y: 7700, w: 50, h: 1000, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -349,7 +364,7 @@ function createScene() {
   blocks.push(new BlockCore(
     world,
     {
-      x: 9300, y: 8100, w: 50, h: 20, color: 'red',
+      x: 9300, y: 8100, w: 50, h: 20, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -369,7 +384,7 @@ function createScene() {
    blocks.push(new BlockCore(
     world,
     {
-      x: 9500, y: 8100, w: 50, h: 20, color: 'red',
+      x: 9500, y: 8100, w: 50, h: 20, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -390,7 +405,7 @@ function createScene() {
    blocks.push(new BlockCore(
     world,
     {
-      x: 9700, y: 8100, w: 50, h: 20, color: 'red',
+      x: 9700, y: 8100, w: 50, h: 20, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -410,7 +425,7 @@ function createScene() {
    blocks.push(new BlockCore(
     world,
     {
-      x: 9900, y: 8100, w: 50, h: 20, color: 'red',
+      x: 9900, y: 8100, w: 50, h: 20, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -430,7 +445,7 @@ function createScene() {
    blocks.push(new BlockCore(
     world,
     {
-      x: 10100, y: 8100, w: 50, h: 20, color: 'red',
+      x: 10100, y: 8100, w: 50, h: 20, xcolor: 'red',
       triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
       trigger: (ball, block) => {
         if (!block.attributes.triggered) {
@@ -450,7 +465,7 @@ function createScene() {
  blocks.push(new BlockCore(
   world,
   {
-    x: 10300, y: 8100, w: 50, h: 20, color: 'red',
+    x: 10300, y: 8100, w: 50, h: 20, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -470,7 +485,7 @@ function createScene() {
 blocks.push(new BlockCore(
   world,
   {
-    x: 10500, y: 8100, w: 50, h: 20, color: 'red',
+    x: 10500, y: 8100, w: 50, h: 20, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -490,7 +505,7 @@ blocks.push(new BlockCore(
 blocks.push(new BlockCore(
   world,
   {
-    x: 10700, y: 8100, w: 50, h: 20, color: 'red',
+    x: 10700, y: 8100, w: 50, h: 20, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -511,7 +526,7 @@ blocks.push(new BlockCore(
 blocks.push(new BlockCore(
   world,
   {
-    x: 10900, y: 8100, w: 50, h: 20, color: 'red',
+    x: 10900, y: 8100, w: 50, h: 20, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -531,7 +546,7 @@ blocks.push(new BlockCore(
 blocks.push(new BlockCore(
   world,
   {
-    x: 11100, y: 8100, w: 50, h: 20, color: 'red',
+    x: 11100, y: 8100, w: 50, h: 20, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -554,7 +569,7 @@ blocks.push(new BlockCore(
 //   //saal block 4 unten
 //   blocks.push(new BlockCore(
 //     world,
-//     { x: 5600, y: 6500, w: 300, h: 20, color: 'lightgrey' }, // vertical block on the left
+//     { x: 5600, y: 6500, w: 300, h: 20, xcolor: 'lightgrey' }, // vertical block on the left
 //     { isStatic: true, angle: PI/10  }
   
 //   ));
@@ -564,7 +579,7 @@ blocks.push(new BlockCore(
   // resetblock
   resetBlock = new BlockCore(
     world,
-    { x: 7600, y: 5000, w: 2000, h: 20, color: 'grey', angle: 0 }, // horizontal block
+    { x: 7600, y: 5000, w: 2000, h: 20, xcolor: 'grey', angle: 0 }, // horizontal block
     { isStatic: true }
   );
   blocks.push(resetBlock);
@@ -572,14 +587,14 @@ blocks.push(new BlockCore(
   // Left vertical block
   // blocks.push(new BlockCore(
   //   world,
-  //   { x: 2000, y: 950, w: 50, h: 500, color: 'lightgrey', angle: PI / 2 }, // vertical block on the left
+  //   { x: 2000, y: 950, w: 50, h: 500, xcolor: 'lightgrey', angle: PI / 2 }, // vertical block on the left
   //   { isStatic: true }
   // ));
 
   //  // Right vertical block
   //  blocks.push(new BlockCore(
   //   world,
-  //   { x: 3200, y: 950, w: 50, h: 500, color: 'lightgrey', angle: PI / 2 }, // vertical block on the right
+  //   { x: 3200, y: 950, w: 50, h: 500, xcolor: 'lightgrey', angle: PI / 2 }, // vertical block on the right
   //   { isStatic: true }
 
   // ));
@@ -589,7 +604,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 8220, y: 4390, w: 500, h: 20, color: 'orange', Image: book1,
+      x: 8220, y: 4390, w: 500, h: 20, xcolor: 'orange', Image: book1,
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -617,7 +632,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 6720, y: 4390, w: 150, h: 20, color: 'orange',
+      x: 6720, y: 4390, w: 150, h: 20, xcolor: 'orange',
       restitution: 0.0,
       friction: 0.8,
       density: 0.1,
@@ -635,7 +650,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 7670, y: 4390, w: 200, h: 20, color: 'orange',
+      x: 7670, y: 4390, w: 200, h: 20, xcolor: 'orange',
       restitution: 0.0,
       friction: 0.5,
       density: 0.1,
@@ -653,7 +668,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 7200, y: 4390, w: 200, h: 20, color: 'orange',
+      x: 7200, y: 4390, w: 200, h: 20, xcolor: 'orange',
       restitution: 0.0,
       friction: 0.8,
       density: 0.5,
@@ -672,7 +687,7 @@ blocks.push(new BlockCore(
     blocks.push(new BlockCore(
       world,
       {
-        x: 6200, y: 4900, w: 600, h: 20, color: 'red',
+        x: 6200, y: 4900, w: 600, h: 20, xcolor: 'red',
         triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
         trigger: (ball, block) => {
           if (!block.attributes.triggered) {
@@ -692,7 +707,7 @@ blocks.push(new BlockCore(
   blocks.push(new TrampolineBlock(
     world,
     {
-      x: 7200, y: 3150, w: 200, h: 20, color: 'orange',
+      x: 7200, y: 3150, w: 200, h: 20, xcolor: 'orange',
       restitution: 0.0,
       friction: 0.8,
       density: 0.5,
@@ -709,46 +724,49 @@ blocks.push(new BlockCore(
 
    //add stacks
   //  boxes = new Stack(world, {
-  //   x: 7500, y: 8000, cols: 1, rows: 4, colGap: 0, rowGap: 0, color: 'black',
+  //   x: 7500, y: 8000, cols: 1, rows: 4, colGap: 0, rowGap: 0, xcolor: 'black',
   //   create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50,)
   //   });
 
   // boxess = new Stack(world, {
-  //   x: 8500, y: 8000, cols: 1, rows: 5, colGap: 0, rowGap: 0, color: 'blue',
+  //   x: 8500, y: 8000, cols: 1, rows: 5, colGap: 0, rowGap: 0, xcolor: 'blue',
   //   create: (x, y) => Matter.Bodies.rectangle(x, y, 100, 50)
     
   // });
 
+
+  
+
 //buch1
   buch1 = new Block(world,
-    { x: 7500, y: 8150, w: 100, h: 50, xcolor: 'red', image: book1 },
+    { x: 7500, y: 8150, w: 90, h: 40, xcolor: 'red', image: book1 },
     
     { isStatic: false }
   );
 // buch2
   buch2 = new Block(world,
-    { x: 7500, y: 8050, w: 100, h: 50, xcolor: 'red', image: book2 },
+    { x: 7500, y: 8050, w: 90, h: 40, xcolor: 'red', image: book2 },
     
     { isStatic: false }
   );
 
   //buch3
   buch3 = new Block(world,
-    { x: 7500, y: 7950, w: 100, h: 50, xcolor: 'red', image: book3 },
+    { x: 7500, y: 7950, w: 90, h: 40, xcolor: 'red', image: book3 },
     
     { isStatic: false }
   );
 
   //buch4
   buch4 = new Block(world,
-    { x: 7500, y: 7850, w: 100, h: 50, xcolor: 'red', image: book4 },
+    { x: 7500, y: 7850, w: 90, h: 40, xcolor: 'red', image: book4 },
     
     { isStatic: false }
   );
 
   //buch5
   buch5 = new Block(world,
-    { x: 8500, y: 8150, w: 100, h: 50, xcolor: 'red', image: book5 },
+    { x: 8500, y: 8150, w: 90, h: 40, xcolor: 'red', image: book5 },
     
     { isStatic: false }
   );
@@ -765,21 +783,21 @@ blocks.push(new BlockCore(
 
     //buch7
     buch7 = new Block(world,
-      { x: 8500, y: 7950, w: 100, h: 50, xcolor: 'red', image: book7 },
+      { x: 8500, y: 7950, w: 90, h: 40, xcolor: 'red', image: book7 },
       
       { isStatic: false }
   );
   
    //buch8
    buch8 = new Block(world,
-    { x: 8500, y: 7850, w: 100, h: 50, xcolor: 'red', image: book8 },
+    { x: 8500, y: 7850, w: 90, h: 40, xcolor: 'red', image: book8 },
     
     { isStatic: false }
 );
 
   //buch9
   buch9 = new Block(world,
-    { x: 8500, y: 7750, w: 100, h: 50, xcolor: 'red', image: book9 },
+    { x: 8500, y: 7750, w: 90, h: 40, xcolor: 'red', image: book9 },
     
     { isStatic: false }
 );
@@ -792,7 +810,7 @@ blocks.push(new BlockCore(
  blocks.push(new BlockCore(
   world,
   {
-    x: 7500, y: 8100, w: 20, h: 200, color: 'red',
+    x: 7500, y: 8100, w: 20, h: 200, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -812,7 +830,7 @@ blocks.push(new BlockCore(
 blocks.push(new BlockCore(
   world,
   {
-    x: 8500, y: 8100, w: 20, h: 200, color: 'red',
+    x: 8500, y: 8100, w: 20, h: 200, xcolor: 'red',
     triggered: false, // Neue Variable, um zu verfolgen, ob der Sensorblock bereits ausgelöst wurde
     trigger: (ball, block) => {
       if (!block.attributes.triggered) {
@@ -831,13 +849,13 @@ blocks.push(new BlockCore(
 
    // propeller
    propeller = new Block(world,
-    { x: 11400, y: 7670, w: 950, h: 30, color: 'grey' },
+    { x: 11400, y: 7670, w: 950, h: 30, xcolor: 'grey', image: holzpropeller },
     { isStatic: true, angle: angle }
   );
 
   // elevator
   elevator = new Block(world,
-    { x: 6670, y: elevatorY, w: 700, h: 50, color: 'red', ximage: book1 },
+    { x: 6670, y: elevatorY, w: 700, h: 50, xcolor: 'red', image: holzelevator },
     
     { isStatic: true }
   );
@@ -925,6 +943,8 @@ function draw() {
   buch7.draw()
   buch8.draw()
   buch9.draw()
+
+  elevatorstop.draw()
 
   
 }
